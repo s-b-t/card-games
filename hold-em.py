@@ -58,14 +58,14 @@ turn = dealTurn()
 river = dealRiver()
 
 # Display the cards
-print("Your Hand:")
+print("YOUR HAND:")
 displayCards(hand)
 
-print("\nFlop:")
+print("\nTHE FLOP:")
 displayCards(flop)
 
-print("\nTurn:")
+print("\nTHE TURN:")
 displayCards([turn])
 
-print("\nRiver:")
+print("\nTHE RIVER:")
 displayCards([river])
