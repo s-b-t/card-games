@@ -65,7 +65,7 @@ def main():
         decision = getPlayerDecision()
         
         if decision == 'F':
-            print("You have folded. Round over.")
+            print("You folded. Round over.")
             break
         elif decision == 'B':
             print("You chose to Bet.\n")
