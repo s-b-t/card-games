@@ -28,48 +28,69 @@ def displayCards(cards):
     for row in rows:
         print(row)
 
-# Function to deal a hand (i.e. 2 cards)
 def dealHand():
     return [deck.pop(0) for _ in range(2)]
 
 def burnCard():
-    # Burn the top card from the deck (the first element of the list)
     return deck.pop(0)
 
 def dealFlop():
-    # Burn the top card and deal the next 3 cards in the deck (Flop cards)
     burnCard()
     return [deck.pop(0) for _ in range(3)]
 
 def dealTurn():
-    # Burn the top card and deal the next card in the deck (Turn card)
     burnCard()
     return deck.pop(0)
 
 def dealRiver():
-    # Burn the top card and deal the next card in the deck (River card)
     burnCard()
     return deck.pop(0)
 
-def main():
-# Example: Deal a hand (2 cards), the Flop (3 cards), the Turn (1 card), and the River (1 card)
-    hand = dealHand()
-    flop = dealFlop()
-    turn = dealTurn()
-    river = dealRiver()
+def getPlayerDecision():
+    while True:
+        decision = input("Do you want to (B)et, (C)heck, or (F)old? (B/C/F): ").strip().upper()
+        print()
+        if decision in ['B', 'C', 'F']:
+            return decision
+        print("Invalid choice. Please enter 'B' for Bet, 'C' for Check, or 'F' for Fold.")
+        print()
 
-    # Display the cards
+def main():
+    # Deal initial hand
+    hand = dealHand()
     print("YOUR HAND:")
     displayCards(hand)
+    
+    while True:
+        decision = getPlayerDecision()
+        
+        if decision == 'F':
+            print("You have folded. Game over.")
+            break
+        elif decision == 'B':
+            print("You chose to Bet.\n")
+            input("How much would you like to bet? ")
+            # You can add more betting logic here if needed
+        elif decision == 'C':
+            print("You chose to Check.")
+            # Proceed with the game
 
-    print("\nTHE FLOP:")
-    displayCards(flop)
+        # Deal and display the flop, turn, and river
+        print("\nTHE FLOP:")
+        flop = dealFlop()
+        displayCards(flop)
 
-    print("\nTHE TURN:")
-    displayCards([turn])
+        print("\nTHE TURN:")
+        turn = dealTurn()
+        displayCards([turn])
 
-    print("\nTHE RIVER:")
-    displayCards([river])
+        print("\nTHE RIVER:")
+        river = dealRiver()
+        displayCards([river])
+        
+        # End the game loop after showing all cards
+        print("The game is now over.")
+        break
 
 if __name__ == "__main__":
     main()
