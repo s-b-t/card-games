@@ -11,20 +11,20 @@ deck = [(rank + suit) for rank in ranks for suit in suits]
 secrets.SystemRandom().shuffle(deck)
 
 def displayCards(cards):
-    # Displays all the cards in the cards list (text displayed on each row).
+    # Displays all the cards in the cards list
     rows = ['', '', '', '', '']
 
     for card in cards:
-        # Prints top line of card:
+        # Prints top line of card
         rows[0] += ' ___  '
         
-        # Prints the card's front:
+        # Prints the card's front
         rank, suit = card[:-2], card[-2:]
         rows[1] += '|{} | '.format(rank.ljust(2))
         rows[2] += '| {} | '.format(suit)
         rows[3] += '|_{}| '.format(rank.rjust(2, '_'))
             
-    # Prints each row on the screen:
+    # Prints each row on the screen
     for row in rows:
         print(row)
 
