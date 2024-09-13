@@ -2,13 +2,31 @@ import secrets
 
 # Define the ranks and suits
 ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-suits = [' ♥︎', ' ♠︎', ' ♦︎', ' ♣︎']
+suits = ['♥︎', '♠︎', '♦︎', '♣︎']
 
 # Create the deck of cards as a list of (rank + suit) tuples
 deck = [(rank + suit) for rank in ranks for suit in suits]
 
 # Shuffle the deck using the CSRNG (cryptographically secure random number generator)
 secrets.SystemRandom().shuffle(deck)
+
+def displayCards(cards):
+    # Displays all the cards in the cards list (text displayed on each row).
+    rows = ['', '', '', '', '']
+
+    for card in cards:
+        # Prints top line of card:
+        rows[0] += ' ___  '
+        
+        # Prints the card's front:
+        rank, suit = card[:-2], card[-2:]
+        rows[1] += '|{} | '.format(rank.ljust(2))
+        rows[2] += '| {} | '.format(suit)
+        rows[3] += '|_{}| '.format(rank.rjust(2, '_'))
+            
+    # Prints each row on the screen:
+    for row in rows:
+        print(row)
 
 # Function to deal a hand (i.e. 2 cards)
 def dealHand():
@@ -39,10 +57,15 @@ flop = dealFlop()
 turn = dealTurn()
 river = dealRiver()
 
-print()
-print("Hand:", hand)
-print()
-print("Flop:", flop)
-print("Turn:", turn)
-print("River:", river)
-print()
+# Display the cards
+print("Your Hand:")
+displayCards(hand)
+
+print("\nFlop:")
+displayCards(flop)
+
+print("\nTurn:")
+displayCards([turn])
+
+print("\nRiver:")
+displayCards([river])
