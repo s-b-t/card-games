@@ -65,14 +65,14 @@ def main():
         decision = getPlayerDecision()
         
         if decision == 'F':
-            print("You have folded. Game over.")
+            print("You have folded. Round over.")
             break
         elif decision == 'B':
             print("You chose to Bet.\n")
             input("How much would you like to bet? ")
             # You can add more betting logic here if needed
         elif decision == 'C':
-            print("You chose to Check.")
+            print("You Checked.")
             # Proceed with the game
 
         # Deal and display the flop, turn, and river
