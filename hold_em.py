@@ -54,8 +54,8 @@ def getPlayerDecision(hand, canBet):
     while True:
         if canBet:
             decision = input("Do you want to (B)et, (C)heck, (F)old, or go (A)ll in? (B/C/F/A): ").strip().upper()
-        else:
-            decision = input("Do you want to (C)heck, (F)old, or go (A)ll in? (C/F/A): ").strip().upper()
+        elif money == 0:
+            decision = input("You're all out of money! Press Enter to continue...")
         
         print()
         if decision in ['B', 'C', 'F', 'A'] and (canBet or decision != 'B'):
@@ -116,10 +116,10 @@ def main():
                 print("You folded. Round over.")
                 break
             elif decision == 'B':
-                print("You chose to Bet.\n")
+                # print("You chose to Bet.\n")
                 bet = getBet(money)
                 money -= bet
-                print(f"You bet ${bet}. Remaining money: ${money}\n")
+                print(f"You bet ${bet}. Piggy Bank: ${money}\n")
             elif decision == 'C':
                 print("You Checked.")
             elif decision == 'A':
@@ -174,7 +174,7 @@ def main():
                 stagesRevealed["river"] = True
             
             # Display all community cards together
-            print("\nCommunity Cards:")
+            # print("\nCommunity Cards:")
             displayCards(communityCards)
             
             # Last chance to Bet, Check, or Fold after the river card is revealed
@@ -184,16 +184,16 @@ def main():
                 if decision == 'F':
                     print("You folded. Round over.")
                 elif decision == 'B':
-                    print("You chose to Bet.\n")
+                    # print("You chose to Bet.\n")
                     bet = getBet(money)
                     money -= bet
-                    print(f"You bet ${bet}. Remaining money: ${money}\n")
+                    print(f"You bet ${bet}. Piggy Bank: ${money}\n")
                 elif decision == 'C':
                     print("You Checked.")
                 elif decision == 'A':
                     print("You went All in!")
                     money = 0  # Player's entire money is depleted
-                    print("\nAll 5 community cards:")
+                    # print("\nAll 5 community cards:")
                     displayCards(communityCards)
                 
                 # End the round after the player's final decision
