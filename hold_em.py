@@ -18,13 +18,13 @@ def displayCards(cards):
 
     for card in cards:
         # Prints top line of card
-        rows[0] += ' ___  '
+        rows[0] += ' _____  '
         
         # Prints the card's front
         rank, suit = card[:-2], card[-2:]
-        rows[1] += '|{} | '.format(rank.ljust(2))
-        rows[2] += '| {} | '.format(suit)
-        rows[3] += '|_{}| '.format(rank.rjust(2, '_'))
+        rows[1] += '|{}   | '.format(rank.ljust(2))
+        rows[2] += '|  {}  | '.format(suit)
+        rows[3] += '|___{}| '.format(rank.rjust(2, '_'))
             
     # Prints each row on the screen
     for row in rows:
@@ -54,8 +54,8 @@ def getPlayerDecision(hand, canBet):
     while True:
         if canBet:
             decision = input("Do you want to (B)et, (C)heck, (F)old, or go (A)ll in? (B/C/F/A): ").strip().upper()
-        elif money == 0:
-            decision = input("You're all out of money! Press Enter to continue...")
+        else:
+            decision = input("Do you want to (C)heck, (F)old, or go (A)ll in? (C/F/A): ").strip().upper()
         
         print()
         if decision in ['B', 'C', 'F', 'A'] and (canBet or decision != 'B'):
@@ -101,11 +101,37 @@ def main():
         while True:
             print("\nPiggy Bank:", "$", money)
             
-            if money <= 0:
-                print("You poor bastard! Good thing you weren't gambling with your life savings!")
-                print("Better luck next time!")
-                sys.exit()
-            
+            if money == 0 and decision == 'A':
+                print("You have no money left!")
+                print("All community cards will be revealed.")
+                if not stagesRevealed["flop"]:
+                    print("\nTHE FLOP:")
+                    flop = dealFlop()
+                    communityCards.extend(flop)
+                    stagesRevealed["flop"] = True
+                    displayCards(communityCards)
+                    input("Press Enter to see the Turn card...")
+                if not stagesRevealed["turn"]:
+                    print("\nTHE TURN:")
+                    turn = dealTurn()
+                    communityCards.append(turn)
+                    stagesRevealed["turn"] = True
+                    displayCards(communityCards)
+                    input("Press Enter to see the River card...")
+                if not stagesRevealed["river"]:
+                    print("\nTHE RIVER:")
+                    river = dealRiver()
+                    communityCards.append(river)
+                    stagesRevealed["river"] = True
+                    displayCards(communityCards)
+                
+                print("\nRound over. Press Enter to start a new round or type 'QUIT' to exit.")
+                if input().strip().upper() == "QUIT":
+                    print("Thanks for playing! See you next time.")
+                    sys.exit()
+                else:
+                    break  # Start a new round
+
             # Determine if the player can bet (i.e., before the river)
             canBet = not stagesRevealed["river"]
             
@@ -116,10 +142,10 @@ def main():
                 print("You folded. Round over.")
                 break
             elif decision == 'B':
-                # print("You chose to Bet.\n")
+                print("You chose to Bet.\n")
                 bet = getBet(money)
                 money -= bet
-                print(f"You bet ${bet}. Piggy Bank: ${money}\n")
+                print(f"You bet ${bet}. Remaining money: ${money}\n")
             elif decision == 'C':
                 print("You Checked.")
             elif decision == 'A':
@@ -162,38 +188,42 @@ def main():
                 flop = dealFlop()
                 communityCards.extend(flop)
                 stagesRevealed["flop"] = True
+                displayCards(communityCards)
+                # Continue to the next round after displaying flop
+                input("Press Enter to continue to the Turn card...")
             elif not stagesRevealed["turn"]:
                 print("\nTHE TURN:")
                 turn = dealTurn()
                 communityCards.append(turn)
                 stagesRevealed["turn"] = True
+                displayCards(communityCards)
+                # Continue to the next round after displaying turn
+                input("Press Enter to continue to the River card...")
             elif not stagesRevealed["river"]:
                 print("\nTHE RIVER:")
                 river = dealRiver()
                 communityCards.append(river)
                 stagesRevealed["river"] = True
-            
-            # Display all community cards together
-            # print("\nCommunity Cards:")
-            displayCards(communityCards)
-            
-            # Last chance to Bet, Check, or Fold after the river card is revealed
+                displayCards(communityCards)
+                
+            # Last chance to Bet, Check, Fold, or All In after the river card is revealed
             if stagesRevealed["river"]:
-                decision = getPlayerDecision(hand, False)
+                decision = getPlayerDecision(hand, True)
                 
                 if decision == 'F':
                     print("You folded. Round over.")
+                    break
                 elif decision == 'B':
-                    # print("You chose to Bet.\n")
+                    print("You chose to Bet.\n")
                     bet = getBet(money)
                     money -= bet
-                    print(f"You bet ${bet}. Piggy Bank: ${money}\n")
+                    print(f"You bet ${bet}. Remaining money: ${money}\n")
                 elif decision == 'C':
                     print("You Checked.")
                 elif decision == 'A':
                     print("You went All in!")
                     money = 0  # Player's entire money is depleted
-                    # print("\nAll 5 community cards:")
+                    print("\nAll 5 community cards:")
                     displayCards(communityCards)
                 
                 # End the round after the player's final decision
